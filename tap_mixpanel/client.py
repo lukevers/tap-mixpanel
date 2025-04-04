@@ -98,7 +98,8 @@ class MixpanelClient(object):
                  username,
                  password,
                  project_id,
-                 user_agent=None):
+                 user_agent=None,
+                 exclude_streams=[]):
         self.__api_secret = api_secret
         self.username = username
         self.password = password
@@ -108,6 +109,7 @@ class MixpanelClient(object):
         self.disable_engage_endpoint = False
         self.project_id = project_id
         self.basic_auth = False
+        self.exclude_streams = exclude_streams
 
     def __enter__(self):
         self.__verified = self.check_access()

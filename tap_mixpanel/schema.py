@@ -126,6 +126,10 @@ def get_schemas(client, properties_flag, denest_properties_flag):
     field_metadata = {}
 
     for stream_name, stream_metadata in STREAMS.items():
+        if stream_name in client.exclude_streams:
+            LOGGER.warning('Stream %s is excluded from the tap config. Skipping.', stream_name)
+            continue
+
         # When the client detects disable_engage_endpoint, skip discovering the stream
         if stream_name == 'engage' and client.disable_engage_endpoint:
             LOGGER.warning('Mixpanel returned a 402 indicating the Engage endpoint and stream is unavailable. Skipping.')

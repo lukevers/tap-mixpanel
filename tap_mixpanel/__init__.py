@@ -55,12 +55,20 @@ def main():
          params.update({"username":None,"password":None,"project_id":None})  
     else:
         raise Exception("No API secret OR Username/Password provided.")
-          
+
+    # Check for streams to exclude
+    exclude_streams = []
+    if parsed_args.config.get('exclude_streams'):
+        exclude_streams = parsed_args.config['exclude_streams']
+        if not isinstance(exclude_streams, list):
+            raise Exception("exclude_streams must be a list")
+
     with MixpanelClient(parsed_args.config['api_secret'],
                         parsed_args.config['username'],
                         parsed_args.config['password'],
                         parsed_args.config['project_id'],
-                        parsed_args.config['user_agent']) as client:
+                        parsed_args.config['user_agent'],
+                        exclude_streams) as client:
 
         state = {}
         if parsed_args.state:
