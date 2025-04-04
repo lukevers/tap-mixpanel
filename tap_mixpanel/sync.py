@@ -520,7 +520,11 @@ def sync(client, config, catalog, state, start_date):
     LOGGER.info('last/currently syncing stream: {}'.format(last_stream))
     selected_streams = []
     for stream in catalog.get_selected_streams(state):
+        if stream.stream in client.exclude_streams:
+            LOGGER.warning('Stream %s is excluded from the tap config. Skipping.', stream.stream)
+            continue
         selected_streams.append(stream.stream)
+
     LOGGER.info('selected_streams: {}'.format(selected_streams))
 
     if not selected_streams:
